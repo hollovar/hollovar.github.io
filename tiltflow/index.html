@@ -246,25 +246,37 @@ genuinely difficult or painful rather than merely annoying.</p>
 	<section class="prose">
 		<h2>The privacy claim, and how to check it</h2>
 
+		<p>TiltFlow does ask you to grant something, and it is worth being exact about what.
+		To swipe on your behalf it needs an accessibility service, which you switch on
+		yourself in Android's settings. Android provides no other route for one application
+		to scroll another, so there is no version of this product that does not ask. What
+		matters is how much that service is allowed to do.</p>
+
 		<div class="callout">
 			<span class="note callout__label">Note 01 — capability, not promise</span>
 			<p class="key-point">TiltFlow does not read the content of your screen, and cannot
 			send anything anywhere.</p>
-			<p>The released application requests <strong>no Android permissions at all</strong>,
-			including no internet permission, so it has no route by which to transmit
-			anything. Its accessibility service is registered without permission to retrieve
-			window content, so it is technically unable to read your screen. There is no
-			account, no advertising, and no analytics.</p>
+			<p>Its accessibility service is declared
+			<code>canRetrieveWindowContent="false"</code> and
+			<code>canPerformGestures="true"</code>: it may swipe, and Android will not give it
+			the contents of your screen. It is unable to read the screen rather than choosing
+			not to. Separately, the released build declares no Android permissions at all —
+			including no internet permission — so it has no route by which to transmit
+			anything. There is no account, no advertising and no analytics.</p>
 		</div>
 
 		<p>Both of those are properties of the application's manifest rather than assurances in
-		a document — which means you do not have to take them on trust. Android will show you
-		the permission list for any installed application, and it will be empty.</p>
+		a document, which means you do not have to take them on trust. Android will show you
+		the permission list for any installed application, and TiltFlow's is empty. The
+		accessibility service appears in Android's own Accessibility settings, and you can turn
+		it off there at any moment without uninstalling anything.</p>
 
 		<p>To decide whether tilting should scroll where you are, TiltFlow compares the name of
-		the application in front with the list you ticked. That comparison happens on your
-		device; the name is not stored, not recorded and not sent anywhere. The full detail is
-		in the <a href="/tiltflow/privacy/">privacy policy</a>.</p>
+		the application in front with the list you ticked. The service subscribes to one kind
+		of event only, <code>typeWindowStateChanged</code>, which is how it learns that the
+		front application changed. That comparison happens on your device; the name is not
+		stored, not recorded and not sent anywhere. The full detail is in the
+		<a href="/tiltflow/privacy/">privacy policy</a>.</p>
 	</section>
 
 	<section class="prose">

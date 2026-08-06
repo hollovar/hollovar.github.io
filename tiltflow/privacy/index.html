@@ -72,15 +72,22 @@
 			horizontal swipe gesture on your behalf.</li>
 		</ul>
 
+		<p>The accessibility service is the one thing TiltFlow asks you to grant. It is not a
+		manifest permission: it is a switch you turn on yourself in Android's Accessibility
+		settings, and you can turn it off in the same place at any time. Android provides no
+		other way for an application to swipe on your behalf.</p>
+
 		<h2>What TiltFlow does not do</h2>
 
 		<p>TiltFlow does <strong>not</strong> read the content of your screen. Its accessibility
-		service is registered without permission to retrieve window content, and is technically
-		unable to do so.</p>
+		service is declared with <em>canRetrieveWindowContent</em> set to false, so Android does
+		not provide it with screen contents and it is technically unable to obtain them. Within
+		that service it is permitted to do one thing: perform gestures.</p>
 
-		<p>TiltFlow does <strong>not</strong> transmit anything. The released application requests
-		no Android permissions at all, including no internet permission, so it has no capability
-		to send information anywhere.</p>
+		<p>TiltFlow does <strong>not</strong> transmit anything. Beyond the accessibility service
+		described above, the released application declares no Android permissions at all,
+		including no internet permission, so it has no capability to send information
+		anywhere.</p>
 
 		<p>TiltFlow contains no advertising, no analytics, no tracking and no third-party
 		software development kits.</p>
