@@ -4,80 +4,175 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Support — Hollovar Labs</title>
-<meta name="description" content="Support and contact information for Hollovar Labs applications.">
+<meta name="description" content="Support and contact for Hollovar Labs applications, with a fault-finding guide for TiltFlow.">
+<link rel="canonical" href="https://hollovar.github.io/support/">
+<meta name="theme-color" content="#14181d">
+<link rel="icon" href="/assets/icon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/assets/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hollovar Labs">
+<meta property="og:title" content="Support — Hollovar Labs">
+<meta property="og:description" content="Support and contact for Hollovar Labs applications, with a fault-finding guide for TiltFlow.">
+<meta property="og:url" content="https://hollovar.github.io/support/">
+<meta property="og:image" content="https://hollovar.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<header class="site">
-	<div class="wrap">
-		<a class="brand" href="/">Hollovar Labs</a>
-		<nav>
+<header class="masthead">
+	<div class="masthead__inner">
+		<a class="mark" href="/" aria-label="Hollovar Labs — home">
+			<img class="mark__glyph" src="/assets/mark-glyph.webp"
+				srcset="/assets/mark-glyph.webp 128w, /assets/mark-glyph@2x.webp 256w"
+				width="128" height="128" alt="" aria-hidden="true" decoding="async">
+			<span class="mark__name">Hollovar&nbsp;Labs</span>
+		</a>
+		<nav class="nav" aria-label="Primary">
+			<a href="/">Studio</a>
 			<a href="/tiltflow/">TiltFlow</a>
-			<a href="/support/">Support</a>
+			<a href="/tiltflow/privacy/">Privacy</a>
+			<a href="/support/" aria-current="page">Support</a>
 		</nav>
 	</div>
 </header>
 
-<main class="wrap">
+<main id="main" class="sheet sheet--doc">
+<div class="sheet__frame">
 
-	<h1>Support</h1>
-	<p class="lead">Questions, problems and suggestions are welcome.</p>
-
-	<div class="card">
-		<h3>Email</h3>
-		<p><a href="mailto:hollovarlabs@gmail.com">hollovarlabs@gmail.com</a></p>
-		<p class="meta">Please say which application and which Android version you are using.</p>
+	<div class="docblock">
+		<div class="titleblock__rule"></div>
+		<p class="note">Sheet 04 · All applications</p>
+		<h1>Support</h1>
+		<p class="lead">Questions, problems and suggestions all reach the person who wrote the
+		code. There is no ticket system and no support tier.</p>
+		<div class="actions">
+			<a class="btn" href="mailto:hollovarlabs@gmail.com">hollovarlabs@gmail.com</a>
+		</div>
+		<p class="small" style="margin-top:var(--sp-4)">Please say which application and which
+		Android version you are using.</p>
 	</div>
 
-	<h2>TiltFlow — common questions</h2>
+	<div class="prose">
+		<h2>TiltFlow — fault finding</h2>
+		<p>Symptoms are listed with the checks in the order worth making.</p>
+	</div>
 
-	<h3>Tilting does not scroll anything</h3>
+	<section class="fault" aria-label="TiltFlow fault finding">
 
-	<p>Check three things, in this order: the accessibility service is enabled and shows as
-	connected in TiltFlow; the application you are in has been ticked in the list; and the
-	<em>Tilt scrolling</em> switch at the top is on.</p>
+		<div class="fault__row">
+			<p class="fault__ref">F-01</p>
+			<div class="fault__body prose">
+				<h3>Tilting does not scroll anything</h3>
+				<ol>
+					<li>The accessibility service is enabled, and shows as connected inside
+					TiltFlow.</li>
+					<li>The application you are in has been ticked in the list.</li>
+					<li>The <em>Tilt scrolling</em> switch at the top is on.</li>
+				</ol>
+				<p>If the phone is lying flat, sideways tilt cannot be measured at all. Hold it
+				more upright, as you would to read.</p>
+			</div>
+		</div>
 
-	<p>If the phone is lying flat, sideways tilt cannot be measured. Hold it more upright, as
-	you would to read.</p>
+		<div class="fault__row">
+			<p class="fault__ref">F-02</p>
+			<div class="fault__body prose">
+				<h3>An application is missing from the list</h3>
+				<p>Applications appear once you have opened them at least once with TiltFlow's
+				service running. This is deliberate: it means TiltFlow does not need permission
+				to see every application installed on your phone. Open the application, then
+				return to TiltFlow and it will be there.</p>
+			</div>
+		</div>
 
-	<h3>An application is missing from the list</h3>
+		<div class="fault__row">
+			<p class="fault__ref">F-03</p>
+			<div class="fault__body prose">
+				<h3>The page scrolls while I am just holding the phone</h3>
+				<p>Raise <em>Tilt needed to start scrolling</em> in the Sensitivity section; it
+				ships at 12.0°. Re-calibrating the neutral position while holding the phone the
+				way you actually read is usually the better fix, because every angle is measured
+				from that position.</p>
+			</div>
+		</div>
 
-	<p>Applications appear in the list once you have opened them at least once with TiltFlow's
-	service running. This is deliberate: it means TiltFlow does not need permission to see
-	every application installed on your phone. Open the application, then return to TiltFlow
-	and it will be there.</p>
+		<div class="fault__row">
+			<p class="fault__ref">F-04</p>
+			<div class="fault__body prose">
+				<h3>My e-book reader turns too many pages at once</h3>
+				<p>For readers that turn pages sideways, such as Kindle, enable both <em>Turn
+				pages sideways</em> and <em>One swipe per tilt</em> for that application. One
+				tilt then turns exactly one page, however long you hold it.</p>
+			</div>
+		</div>
 
-	<h3>The page scrolls while I am just holding the phone</h3>
+		<div class="fault__row">
+			<p class="fault__ref">F-05</p>
+			<div class="fault__body prose">
+				<h3>An application ignores TiltFlow completely</h3>
+				<p>Some applications (certain games, and readers with copy protection) ignore
+				simulated swipe gestures. These cannot be scrolled by TiltFlow, and there is no
+				setting that will change that. A report naming the application is still useful.</p>
+			</div>
+		</div>
 
-	<p>Raise <em>Tilt needed to start scrolling</em> in the Sensitivity section. You can also
-	re-calibrate your neutral position while holding the phone the way you actually read.</p>
+		<div class="fault__row">
+			<p class="fault__ref">F-06</p>
+			<div class="fault__body prose">
+				<h3>How do I stop TiltFlow?</h3>
+				<p>Leave the application: TiltFlow stops as soon as a non-ticked application is
+				in front. You can also turn off the <em>Tilt scrolling</em> switch, or disable
+				the service entirely in Android's Accessibility settings.</p>
+			</div>
+		</div>
 
-	<h3>My e-book reader turns too many pages at once</h3>
+	</section>
 
-	<p>For readers that turn pages sideways, such as Kindle, enable both <em>Turn pages
-	sideways</em> and <em>One swipe per tilt</em> for that application. One tilt then turns
-	exactly one page, however long you hold it.</p>
+	<div class="prose">
+		<h2>Reporting something</h2>
 
-	<h3>An application ignores TiltFlow completely</h3>
+		<p>Compatibility reports are the most useful thing to send, especially for applications
+		that ignore simulated swipes — that list can only be built from real phones. Feedback
+		and suggestions are equally welcome, and so is a rating once TiltFlow is publicly
+		available on Google Play.</p>
 
-	<p>Some applications — certain games, and readers with copy protection — ignore simulated
-	swipe gestures. These cannot be scrolled by TiltFlow, and there is no setting that will
-	change that.</p>
+		<p>TiltFlow is independently developed, which means there is one person reading this
+		address. Replies are not instant, but they are from someone who can actually change the
+		code.</p>
+	</div>
 
-	<h3>How do I stop TiltFlow?</h3>
+	<footer class="colophon">
+		<div class="colophon__cell">
+			<p class="note">Contact</p>
+			<p class="colophon__value"><a href="mailto:hollovarlabs@gmail.com">hollovarlabs@gmail.com</a></p>
+		</div>
+		<div class="colophon__cell">
+			<p class="note">Applications</p>
+			<p class="colophon__value"><a href="/tiltflow/">TiltFlow</a></p>
+		</div>
+		<div class="colophon__cell">
+			<p class="note">Documents</p>
+			<p class="colophon__value"><a href="/tiltflow/privacy/">TiltFlow privacy policy</a></p>
+		</div>
+		<div class="colophon__cell">
+			<p class="note">Sheet</p>
+			<p class="colophon__value">04 · Support</p>
+		</div>
+	</footer>
 
-	<p>Leave the application: TiltFlow stops as soon as a non-ticked application is in front.
-	You can also turn off the <em>Tilt scrolling</em> switch, or disable the service entirely
-	in Android's Accessibility settings.</p>
-
+</div>
 </main>
 
-<footer class="site">
-	<div class="wrap">
-		<p><a href="/tiltflow/privacy/">Privacy policy</a> · Hollovar Labs</p>
-	</div>
-</footer>
+<div class="footnote">
+	<p class="note note--board">© 2026 Hollovar Labs</p>
+	<p class="note note--board">No trackers · No analytics · No third-party requests</p>
+</div>
 
 </body>
 </html>

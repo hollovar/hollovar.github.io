@@ -3,92 +3,492 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TiltFlow — Hollovar Labs</title>
-<meta name="description" content="TiltFlow scrolls the page when you tilt your Android phone, in the applications you choose.">
+<title>TiltFlow — Hands-free scrolling for Android — Hollovar Labs</title>
+<meta name="description" content="TiltFlow scrolls the page when you tilt your Android phone, in the applications you choose. Free, ad-free, and it requests no Android permissions at all.">
+<link rel="canonical" href="https://hollovar.github.io/tiltflow/">
+<meta name="theme-color" content="#14181d">
+<link rel="icon" href="/assets/icon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/assets/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hollovar Labs">
+<meta property="og:title" content="TiltFlow — Hands-free scrolling for Android">
+<meta property="og:description" content="Tilt your phone gently to one side and the page scrolls itself. Only in the applications you choose. No permissions, no network, no accounts.">
+<meta property="og:url" content="https://hollovar.github.io/tiltflow/">
+<meta property="og:image" content="https://hollovar.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<header class="site">
-	<div class="wrap">
-		<a class="brand" href="/">Hollovar Labs</a>
-		<nav>
-			<a href="/tiltflow/">TiltFlow</a>
+<header class="masthead">
+	<div class="masthead__inner">
+		<a class="mark" href="/" aria-label="Hollovar Labs — home">
+			<img class="mark__glyph" src="/assets/mark-glyph.webp"
+				srcset="/assets/mark-glyph.webp 128w, /assets/mark-glyph@2x.webp 256w"
+				width="128" height="128" alt="" aria-hidden="true" decoding="async">
+			<span class="mark__name">Hollovar&nbsp;Labs</span>
+		</a>
+		<nav class="nav" aria-label="Primary">
+			<a href="/">Studio</a>
+			<a href="/tiltflow/" aria-current="page">TiltFlow</a>
 			<a href="/tiltflow/privacy/">Privacy</a>
 			<a href="/support/">Support</a>
 		</nav>
 	</div>
 </header>
 
-<main class="wrap">
+<main id="main" class="sheet">
+<div class="sheet__frame">
 
-	<h1>TiltFlow</h1>
-	<p class="lead">Tilt your phone. The page scrolls itself.</p>
+	<section class="plate">
+		<div class="plate__figure">
+			<div class="tiltfig" id="tiltfig">
+				<svg viewBox="0 0 420 410" role="img" aria-labelledby="tilt-title tilt-desc">
+					<title id="tilt-title">The tilt angle that drives scrolling</title>
+					<desc id="tilt-desc">A phone drawn in section, pivoting about its centre against a
+					vertical datum. The tilt angle is dimensioned by an arc. Two struck rays mark the
+					real thresholds: scrolling starts past twelve degrees and reaches full speed at
+					twenty degrees. Text inside the drawn phone scrolls as the angle passes the
+					threshold.</desc>
 
-	<p>TiltFlow scrolls the page for you when you tilt your phone gently to one side, so you
-	can read one-handed without swiping. Tilt one way to move forward, the other way to go
-	back, and return to your normal reading position to stop. The further you tilt, the
-	faster it scrolls.</p>
+					<defs>
+						<marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+							<path d="M0 1.5 10 5 0 8.5Z" class="d-dim-fill"/>
+						</marker>
+						<clipPath id="screenClip">
+							<rect x="-44" y="-100" width="88" height="200"/>
+						</clipPath>
+					</defs>
 
-	<h2>Only where you want it</h2>
+					<!-- vertical datum -->
+					<path class="d-datum" d="M175 34v296"/>
+					<text class="d-label" x="175" y="27" text-anchor="middle">DATUM</text>
 
-	<p>TiltFlow does nothing until you say where it should work. Choose your browser, your
-	e-book reader, your PDF application — and TiltFlow stays completely inactive everywhere
-	else. Open your messages or the camera and it switches itself off. Go back to reading and
-	it comes back on, without you doing anything.</p>
+					<!-- struck threshold rays, carrying the application's real defaults -->
+					<g class="d-thin" stroke="var(--oxide)" stroke-dasharray="5 4" opacity="0.95" fill="none">
+						<path id="ray12"/><path id="ray12lead"/>
+						<path id="ray20"/><path id="ray20lead"/>
+					</g>
+					<text class="d-value" id="ray12label" x="306" y="0">12.0° START</text>
+					<text class="d-value" id="ray20label" x="306" y="0">20.0° FULL SPEED</text>
 
-	<h2>Made to fit how you read</h2>
+					<!-- the dimensioned angle -->
+					<path class="d-dim" id="arc" fill="none" marker-end="url(#arrow2)"/>
+					<text class="d-value d-value--measure" id="arclabel" text-anchor="middle">0.0°</text>
 
-	<ul>
-		<li>Calibrate your own neutral position, so it works however you hold your phone.</li>
-		<li>Set how far you must tilt before scrolling starts, and how far to reach full speed.</li>
-		<li>Swap the tilt directions if you prefer them the other way round.</li>
-		<li>Move the invisible swipe left, centre or right for applications that need it.</li>
-	</ul>
+					<!-- the phone, in section, on its pivot -->
+					<g id="phone">
+						<rect x="-52" y="-108" width="104" height="216" rx="8" class="d-line" fill="var(--sheet)"/>
+						<rect x="-44" y="-100" width="88" height="200" class="d-thin" fill="var(--sheet-sunk)"/>
+						<line x1="-10" y1="-104" x2="10" y2="-104" class="d-thin"/>
+						<g clip-path="url(#screenClip)">
+							<g id="screenText" stroke="var(--ink-2)" stroke-width="2" opacity="0.34" fill="none" stroke-linecap="round">
+								<!-- the page the tilt is scrolling; the block repeats every 160 units -->
+								<path d="M-34 -100h60M-34 -90h52M-34 -80h60M-34 -70h34M-34 -50h60M-34 -40h48M-34 -30h60M-34 -20h56M-34 0h60M-34 10h40M-34 20h60M-34 30h50M-34 50h58"/>
+								<path d="M-34 60h60M-34 70h52M-34 80h60M-34 90h34M-34 110h60M-34 120h48M-34 130h60M-34 140h56M-34 160h60M-34 170h40M-34 180h60M-34 190h50M-34 210h58"/>
+								<path d="M-34 220h60M-34 230h52M-34 240h60M-34 250h34M-34 270h60M-34 280h48M-34 290h60M-34 300h56M-34 320h60M-34 330h40M-34 340h60M-34 350h50M-34 370h58"/>
+							</g>
+						</g>
+						<!-- pivot mark -->
+						<circle r="3" class="d-dim-fill"/>
+						<circle r="7" class="d-dim" fill="none"/>
+					</g>
 
-	<h3>E-book readers</h3>
+					<!-- live readout, set on the sheet as a measured value -->
+					<g>
+						<path class="d-thin" d="M24 344h372" stroke="var(--ink)"/>
+						<text class="d-label" x="24" y="366">TILT</text>
+						<text class="d-value d-value--measure" id="tiltvalue" x="24" y="392" style="font-size:21px">0.0°</text>
+						<text class="d-label" x="150" y="366">STATE</text>
+						<text class="d-value" id="statevalue" x="150" y="392" style="font-size:21px; fill:var(--ink-3)">IDLE</text>
+					</g>
+				</svg>
 
-	<p>Readers such as Kindle turn whole pages sideways rather than scrolling. TiltFlow
-	handles those too: enable <em>Turn pages sideways</em> and <em>One swipe per tilt</em> for
-	that application, and one tilt turns exactly one page, however long you hold it.</p>
+				<label class="tiltctl">
+					<span class="small">Tilt the drawing — drag it, or use the arrow keys.</span>
+					<input type="range" id="tiltrange" min="-28" max="28" step="0.5" value="0"
+						aria-label="Tilt angle in degrees">
+				</label>
+				<p class="small tiltctl__live" id="tilthint">On an Android phone, this drawing follows the
+				phone itself.</p>
+			</div>
+		</div>
 
-	<h2>Privacy</h2>
+		<div class="titleblock">
+			<div class="titleblock__rule"></div>
+			<p class="note">Plate 01 · Android utility</p>
+			<h1>TiltFlow</h1>
+			<p class="lead">Tilt your phone. The page scrolls itself, only in the applications
+			you choose. It asks you for one thing: permission to swipe on your behalf.</p>
+			<div class="actions">
+				<span class="stamp"><span class="stamp__dot"></span>In review at Google Play</span>
+				<a class="btn btn--ghost" href="/tiltflow/privacy/">Privacy policy</a>
+			</div>
+		</div>
+	</section>
 
-	<div class="card">
-		<p class="key-point">TiltFlow does not read the content of your screen, and cannot
-		send anything anywhere.</p>
-		<p>The released application requests no Android permissions at all — including no
-		internet permission — so it has no way to transmit information off your phone. There
-		is no account, no advertising and no analytics.</p>
-		<p>Full details are in the <a href="/tiltflow/privacy/">TiltFlow privacy policy</a>.</p>
-	</div>
+	<section class="notes-block" aria-label="Specification notes">
+		<p class="note">Notes</p>
+		<ul class="notes-row">
+			<li>Scrolling starts past <span class="dim">12.0°</span> and stops again below <span class="dim">10.0°</span>, so a steady hand does not flicker it on and off</li>
+			<li>Full speed at <span class="dim">20.0°</span>; between the two, speed follows the angle</li>
+			<li>Requires <span class="dim">Android 7.0</span> or later</li>
+		</ul>
+	</section>
 
-	<h2>How it works</h2>
+	<section class="prose">
+		<h2>What it does</h2>
 
-	<p>TiltFlow measures sideways tilt with your phone's motion sensor, and uses Android's
-	Accessibility Service to perform the same swipe your finger would. Android only allows an
-	application to swipe on your behalf through that service, which is why TiltFlow asks you
-	to enable it — and why it explains what the service does before sending you to the
-	settings screen.</p>
+		<p>Tilt the phone gently to one side and the page scrolls for you, so you can read
+		one-handed without swiping. Tilt one way to move forward, the other way to go back,
+		and return to your normal reading position to stop. The further you tilt, the faster
+		it scrolls.</p>
 
-	<p>You can turn it off at any time, in TiltFlow or in Android's Accessibility settings.</p>
+		<p>It is meant for the times swiping is inconvenient: standing on a bus with one hand on
+the rail, eating, holding a child. It is also for people who find repeated swiping
+genuinely difficult or painful rather than merely annoying.</p>
 
-	<h2>Compatibility</h2>
+		<h2>Only where you want it</h2>
 
-	<p>TiltFlow works with applications that respond to ordinary swipe gestures. Some
-	applications — certain games, and readers with copy protection — ignore simulated swipes
-	and cannot be scrolled this way.</p>
+		<p>TiltFlow does nothing until you say where it should work. Tick your browser, your
+		e-book reader, your PDF application. TiltFlow then stays completely inactive
+		everywhere else. Open your messages or the camera and it switches itself off. Go back
+		to reading and it comes back on, without you doing anything.</p>
 
-	<p class="meta">Requires Android 7.0 or later.</p>
+		<p>Applications appear in that list once you have opened them at least once with
+		TiltFlow's service running. That is deliberate: it means TiltFlow never needs
+		permission to see every application installed on your phone.</p>
+	</section>
 
+	<section aria-label="Screens from the application">
+		<h2 class="prose">The application</h2>
+		<div class="specimens">
+			<figure class="specimen">
+				<img src="/assets/screens/main.webp" width="540" height="1150" loading="eager" decoding="async"
+					alt="TiltFlow's main screen, showing the tilt scrolling switch, a note that the accessibility service is disabled, and a live tilt reading of 0.5 degrees against a neutral position of minus 1.1 degrees.">
+				<figcaption><span class="note">Specimen A · Main screen</span>The live tilt reading, the
+				sensor in use, and the calibrated neutral position are all on the first screen.</figcaption>
+			</figure>
+			<figure class="specimen">
+				<img src="/assets/screens/consent.webp" width="540" height="1150" loading="lazy" decoding="async"
+					alt="A dialog titled Enable accessibility service, explaining that TiltFlow uses the service only to perform vertical swipe gestures when you deliberately tilt the device, that it does not read, store or transmit screen content, and that it can be disabled at any time.">
+				<figcaption><span class="note">Specimen B · Consent</span>What the accessibility service
+				is for, in plain words, <em>before</em> you are sent to Android's settings screen.</figcaption>
+			</figure>
+			<figure class="specimen">
+				<img src="/assets/screens/apps.webp" width="540" height="1150" loading="lazy" decoding="async"
+					alt="The application list, set to Only selected applications, with Kindle ticked and its Turn pages sideways and One swipe per tilt switches both on, Settings unticked, and Chrome ticked.">
+				<figcaption><span class="note">Specimen C · Per application</span>Each application gets
+				its own behaviour. Kindle here is set to sideways page turns, one page per tilt.</figcaption>
+			</figure>
+			<figure class="specimen">
+				<img src="/assets/screens/detection.webp" width="540" height="1150" loading="lazy" decoding="async"
+					alt="The application detection panel, stating that TiltFlow reads only the name of the application in front to decide whether tilting should scroll there, and that screen content is never read, above a list of recently used applications.">
+				<figcaption><span class="note">Specimen D · Detection</span>The only thing read is the
+				name of the application in front, and the panel says so on the screen itself.</figcaption>
+			</figure>
+		</div>
+	</section>
+
+	<section class="prose">
+		<h2>Made to fit how you read</h2>
+
+		<p>Everyone holds a phone differently, so nothing here is fixed. These are the values
+		the application ships with; all of them are yours to change.</p>
+
+		<table class="schedule">
+			<caption>Schedule of tilt settings — factory values</caption>
+			<tbody>
+				<tr>
+					<th scope="row">Neutral position</th>
+					<td>Calibrated by you, to however you actually hold the phone. All angles
+					are measured from it.</td>
+				</tr>
+				<tr>
+					<th scope="row">Start scrolling above</th>
+					<td><span class="dim">12.0°</span>, far enough clear of ordinary hand
+					movement that reading still holds steady.</td>
+				</tr>
+				<tr>
+					<th scope="row">Stop scrolling below</th>
+					<td><span class="dim">10.0°</span>, deliberately lower than the start
+					angle, so a hand resting near the threshold cannot stutter it.</td>
+				</tr>
+				<tr>
+					<th scope="row">Full speed at</th>
+					<td><span class="dim">20.0°</span>. Between this and the start angle,
+					speed follows the angle.</td>
+				</tr>
+				<tr>
+					<th scope="row">Direction</th>
+					<td>Swap which way scrolls forward, if you prefer them the other way round.</td>
+				</tr>
+				<tr>
+					<th scope="row">Swipe position</th>
+					<td>Left, centre or right, for applications that only respond in part of
+					the screen.</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h3>E-book readers</h3>
+
+		<p>Readers such as Kindle turn whole pages sideways rather than scrolling. TiltFlow
+		handles those too: enable <em>Turn pages sideways</em> and <em>One swipe per tilt</em>
+		for that application, and one tilt turns exactly one page, however long you hold it.</p>
+	</section>
+
+	<section class="prose">
+		<h2>The privacy claim, and how to check it</h2>
+
+		<div class="callout">
+			<span class="note callout__label">Note 01 — capability, not promise</span>
+			<p class="key-point">TiltFlow does not read the content of your screen, and cannot
+			send anything anywhere.</p>
+			<p>The released application requests <strong>no Android permissions at all</strong>,
+			including no internet permission, so it has no route by which to transmit
+			anything. Its accessibility service is registered without permission to retrieve
+			window content, so it is technically unable to read your screen. There is no
+			account, no advertising, and no analytics.</p>
+		</div>
+
+		<p>Both of those are properties of the application's manifest rather than assurances in
+		a document — which means you do not have to take them on trust. Android will show you
+		the permission list for any installed application, and it will be empty.</p>
+
+		<p>To decide whether tilting should scroll where you are, TiltFlow compares the name of
+		the application in front with the list you ticked. That comparison happens on your
+		device; the name is not stored, not recorded and not sent anywhere. The full detail is
+		in the <a href="/tiltflow/privacy/">privacy policy</a>.</p>
+	</section>
+
+	<section class="prose">
+		<h2>How it works</h2>
+
+		<p>The phone's motion sensor reports how far the device is rolled to one side. TiltFlow
+		takes that angle, smooths it with a light low-pass filter (coefficient 0.15), so a bump in
+the road is not read as an instruction, and compares it with your thresholds. Past
+		12°, it asks Android to perform the same swipe your finger would.</p>
+
+		<p>That last step is the reason the application needs an accessibility service at all.
+		Android only lets an application swipe on your behalf through that service; there is
+		no other route. So TiltFlow asks for it, and explains what the service does before
+		sending you to the settings screen rather than after.</p>
+
+		<p>You can turn it off at any time, in TiltFlow or in Android's Accessibility settings.</p>
+
+		<h2>What it cannot do</h2>
+
+		<p>TiltFlow works with applications that respond to ordinary swipe gestures. Some
+applications (certain games, and readers with copy protection) ignore simulated
+swipes and cannot be scrolled this way. No setting changes that, and it is worth
+		knowing before you install rather than after.</p>
+
+		<p>If the phone is lying flat, sideways tilt cannot be measured. Hold it more upright,
+		as you would to read.</p>
+	</section>
+
+	<section class="prose">
+		<h2>Availability</h2>
+
+		<p>TiltFlow has been submitted to Google Play and is waiting on review. There is no
+		public listing to link to yet — when the review completes, the download link will
+		appear here and on the studio page.</p>
+
+		<p>The first release is free, complete and ad-free. If a paid supporter option is added
+		later it will live inside the same application, not in a separate paid one.</p>
+
+		<p>Compatibility reports are genuinely useful, particularly for applications that
+		ignore simulated swipes. The <a href="/support/">support page</a> has the address.</p>
+	</section>
+
+	<footer class="colophon">
+		<div class="colophon__cell">
+			<p class="note">Application</p>
+			<p class="colophon__value">TiltFlow<br><code>com.hollovar.tiltflow</code></p>
+		</div>
+		<div class="colophon__cell">
+			<p class="note">Requires</p>
+			<p class="colophon__value">Android 7.0 or later</p>
+		</div>
+		<div class="colophon__cell">
+			<p class="note">Documents</p>
+			<p class="colophon__value"><a href="/tiltflow/privacy/">Privacy policy</a><br><a href="/support/">Support</a></p>
+		</div>
+		<div class="colophon__cell">
+			<p class="note">Sheet</p>
+			<p class="colophon__value">02 · TiltFlow</p>
+		</div>
+	</footer>
+
+</div>
 </main>
 
-<footer class="site">
-	<div class="wrap">
-		<p><a href="/tiltflow/privacy/">Privacy policy</a> · <a href="/support/">Support</a> ·
-		Hollovar Labs</p>
-	</div>
-</footer>
+<div class="footnote">
+	<p class="note note--board">© 2026 Hollovar Labs</p>
+	<p class="note note--board">No trackers · No analytics · No third-party requests</p>
+</div>
+
+<script>
+(function () {
+	"use strict";
+
+	var PIVOT_X = 175, PIVOT_Y = 210;
+	var START = 12, STOP = 10, FULL = 20;      // the application's own defaults
+	var ARC_R = 126, LABEL_X = 300;
+
+	var svgNS = "http://www.w3.org/2000/svg";
+	var phone = document.getElementById("phone");
+	var arc = document.getElementById("arc");
+	var arcLabel = document.getElementById("arclabel");
+	var tiltValue = document.getElementById("tiltvalue");
+	var stateValue = document.getElementById("statevalue");
+	var screenText = document.getElementById("screenText");
+	var range = document.getElementById("tiltrange");
+	var hint = document.getElementById("tilthint");
+	var fig = document.getElementById("tiltfig");
+	if (!phone || !range) return;
+
+	var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+	var angle = 0;
+	var scrolling = false;
+	var offset = 0;
+	var userTookOver = false;
+
+	function rad(d) { return (d - 90) * Math.PI / 180; }
+	function px(d, r) { return [PIVOT_X + r * Math.cos(rad(d)), PIVOT_Y + r * Math.sin(rad(d))]; }
+
+	/*
+		Each threshold is struck as a ray clear of the phone, then turned into a horizontal
+		leader with its note — the way a drawing labels a detail it cannot letter in place.
+	*/
+	function drawRay(id, deg, rEnd) {
+		var a = px(deg, 132), b = px(deg, rEnd);
+		document.getElementById(id).setAttribute("d",
+			"M" + a[0].toFixed(1) + " " + a[1].toFixed(1) + "L" + b[0].toFixed(1) + " " + b[1].toFixed(1));
+		document.getElementById(id + "lead").setAttribute("d",
+			"M" + b[0].toFixed(1) + " " + b[1].toFixed(1) + "H" + LABEL_X);
+		return b[1];
+	}
+	document.getElementById("ray12label").setAttribute("y", (drawRay("ray12", START, 190) + 4.5).toFixed(1));
+	document.getElementById("ray20label").setAttribute("y", (drawRay("ray20", FULL, 150) + 4.5).toFixed(1));
+
+	function render() {
+		var mag = Math.abs(angle);
+
+		phone.setAttribute("transform",
+			"translate(" + PIVOT_X + " " + PIVOT_Y + ") rotate(" + angle.toFixed(2) + ")");
+
+		// the dimensioned angle, swept from the datum
+		if (mag < 0.35) {
+			arc.setAttribute("d", "");
+			arcLabel.textContent = "";
+		} else {
+			var a = px(0, ARC_R), b = px(angle, ARC_R);
+			arc.setAttribute("d",
+				"M" + a[0].toFixed(1) + " " + a[1].toFixed(1) +
+				"A" + ARC_R + " " + ARC_R + " 0 0 " + (angle > 0 ? 1 : 0) + " " +
+				b[0].toFixed(1) + " " + b[1].toFixed(1));
+			var m = px(angle / 2, ARC_R + 16);
+			arcLabel.setAttribute("x", m[0]);
+			arcLabel.setAttribute("y", m[1]);
+			arcLabel.textContent = mag.toFixed(1) + "°";
+		}
+
+		// the real hysteresis: start above 12, stop below 10
+		if (!scrolling && mag > START) scrolling = true;
+		else if (scrolling && mag < STOP) scrolling = false;
+
+		tiltValue.textContent = mag.toFixed(1) + "°";
+		stateValue.textContent = scrolling ? "SCROLLING" : "IDLE";
+		stateValue.style.fill = scrolling ? "var(--measure)" : "var(--ink-3)";
+		arc.setAttribute("stroke", scrolling ? "var(--measure)" : "var(--oxide)");
+		arcLabel.style.fill = scrolling ? "var(--measure)" : "var(--oxide)";
+	}
+
+	function speed() {
+		if (!scrolling) return 0;
+		var mag = Math.abs(angle);
+		var t = Math.min(1, Math.max(0, (mag - START) / (FULL - START)));
+		return (0.35 + t * 2.65) * (angle > 0 ? 1 : -1);
+	}
+
+	var last = 0;
+	function frame(now) {
+		var dt = last ? Math.min(48, now - last) : 16;
+		last = now;
+		var v = speed();
+		if (v !== 0) {
+			offset -= v * dt * 0.09;
+			// the greeked column is 10px-per-line and repeats every 160px
+			if (offset < -160) offset += 160;
+			if (offset > 0) offset -= 160;
+			screenText.setAttribute("transform", "translate(0 " + offset.toFixed(2) + ")");
+		}
+		requestAnimationFrame(frame);
+	}
+	requestAnimationFrame(frame);
+
+	function setAngle(deg, fromUser) {
+		if (fromUser) userTookOver = true;
+		angle = Math.max(-28, Math.min(28, deg));
+		if (range.value !== String(angle)) range.value = String(angle);
+		render();
+	}
+
+	range.addEventListener("input", function () { setAngle(parseFloat(range.value), true); });
+
+	// dragging the drawing itself
+	var svg = fig.querySelector("svg");
+	var dragging = false;
+	function fromPointer(e) {
+		var r = svg.getBoundingClientRect();
+		var x = (e.clientX - r.left) / r.width;
+		setAngle((x - 0.5) * 56, true);
+	}
+	svg.addEventListener("pointerdown", function (e) {
+		dragging = true;
+		svg.setPointerCapture(e.pointerId);
+		fromPointer(e);
+	});
+	svg.addEventListener("pointermove", function (e) { if (dragging) fromPointer(e); });
+	svg.addEventListener("pointerup", function () { dragging = false; });
+	svg.addEventListener("pointercancel", function () { dragging = false; });
+	svg.style.cursor = "ew-resize";
+
+	// on a phone, the drawing follows the phone
+	if (window.DeviceOrientationEvent && !("requestPermission" in window.DeviceOrientationEvent)) {
+		window.addEventListener("deviceorientation", function (e) {
+			if (e.gamma === null || e.gamma === undefined) return;
+			userTookOver = true;
+			hint.textContent = "Following your phone. Tilt it.";
+			setAngle(Math.max(-28, Math.min(28, e.gamma)), false);
+		}, { passive: true });
+	}
+
+	render();
+
+	// One authored moment: the drawing takes itself past the threshold once, then stops.
+	if (!reduced) {
+		var t0 = null;
+		function demo(now) {
+			if (userTookOver) return;
+			if (t0 === null) t0 = now;
+			var t = (now - t0) / 2600;
+			if (t >= 1) { setAngle(0, false); return; }
+			setAngle(Math.sin(t * Math.PI) * 16.5, false);
+			requestAnimationFrame(demo);
+		}
+		setTimeout(function () { requestAnimationFrame(demo); }, 900);
+	}
+})();
+</script>
 
 </body>
 </html>

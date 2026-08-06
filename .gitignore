@@ -1,0 +1,8 @@
+# Working records, kept locally and not published.
+# This repository is public and serves GitHub Pages from its root, so anything committed
+# here is world-readable. These two files are notes to ourselves, not part of the site.
+PRODUCT.md
+DESIGN.md
+
+# README.md is deliberately NOT ignored: it documents the repository for anyone who finds it,
+# including the constraints that must not be broken (URL stability, no third-party requests).

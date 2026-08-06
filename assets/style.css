@@ -1,157 +1,1367 @@
 /*
-	Hollovar Labs site styles.
+	Hollovar Labs — measured drawing.
+
+	The site is drawn, not laid out: a pale drafting sheet on a graphite board, one lettering
+	alphabet at drafting widths, hairline rules, hatched masonry, dimension callouts.
 
 	Deliberately self-contained: no web fonts, no analytics, no third-party requests of any
 	kind. A site whose main purpose is to state a privacy position should not load anything
-	from another company's server.
+	from another company's server. Archivo is self-hosted from assets/fonts (SIL OFL 1.1,
+	see assets/fonts/OFL.txt).
 */
 
-:root {
-	--background: #ffffff;
-	--surface: #f5f5f7;
-	--text: #1a1a1e;
-	--text-muted: #5c5c66;
-	--accent: #4a2fd4;
-	--border: #dcdce2;
+/* ------------------------------------------------------------------ lettering */
+
+/*
+	One variable face carries the whole sheet. A drafting office letters with a single
+	alphabet and varies the width by annotation rank, so width is a token here, not a
+	second font.
+*/
+@font-face {
+	font-family: "Archivo";
+	font-style: normal;
+	font-weight: 100 900;
+	font-stretch: 62% 125%;
+	font-display: swap;
+	src: url("/assets/fonts/archivo-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+		U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+		U+FEFF, U+FFFD;
 }
 
+@font-face {
+	font-family: "Archivo";
+	font-style: normal;
+	font-weight: 100 900;
+	font-stretch: 62% 125%;
+	font-display: swap;
+	src: url("/assets/fonts/archivo-latin-ext.woff2") format("woff2");
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+		U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+		U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ------------------------------------------------------------------- tokens */
+
+:root {
+	/* the board the sheet lies on */
+	--board: #14181d;
+	--board-raised: #1b2027;
+	--board-ink: #e7e4dc;
+	--board-ink-2: #9aa3ad;
+	--board-rule: rgba(231, 228, 220, 0.16);
+	--board-rule-strong: rgba(231, 228, 220, 0.32);
+
+	/* the drafting sheet */
+	--sheet: #eae7df;
+	--sheet-sunk: #e0dcd2;
+	--ink: #191d22;
+	--ink-2: #4f565f;
+	/* 4.56:1 on the sheet — the annotation labels are small, so this may not go lighter */
+	--ink-3: #5b626b;
+	--rule: rgba(25, 29, 34, 0.2);
+	--rule-strong: rgba(25, 29, 34, 0.42);
+
+	/*
+		Annotation: dimensions, revisions, leaders. This carries small text everywhere —
+		dimension values, inline emphasis, fault references, the in-review stamp — so it is
+		tuned to clear 4.5:1 on the sheet, on the sunk tone, and on its own 13% tint, in both
+		the day and night palettes. It may not be brightened.
+	*/
+	--oxide: #85391b;
+	--oxide-soft: rgba(133, 57, 27, 0.13);
+
+	/* measured live values only — the cyan carried over from the icon's window slit */
+	--measure: #10687c;
+	--measure-board: #4ed0e3;
+
+	--sp-1: 4px;
+	--sp-2: 8px;
+	--sp-3: 12px;
+	--sp-4: 16px;
+	--sp-5: 24px;
+	--sp-6: 32px;
+	--sp-7: 48px;
+	--sp-8: 64px;
+	--sp-9: 96px;
+	--sp-10: 128px;
+
+	--sheet-max: 1180px;
+	/* Archivo's average advance is well under its `0`, so 68ch measured ~85 characters */
+	--measure-col: 55ch;
+
+	--ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+	Night refinement, not an inversion. A drawing sheet is a light object; flipping it to
+	dark would abandon the world. The board deepens and the sheet loses its glare instead.
+*/
 @media (prefers-color-scheme: dark) {
 	:root {
-		--background: #121216;
-		--surface: #1c1c22;
-		--text: #ececf1;
-		--text-muted: #a0a0ad;
-		--accent: #9d8bff;
-		--border: #33333d;
+		--board: #0e1114;
+		--board-raised: #161a20;
+		--sheet: #ddd9d0;
+		--sheet-sunk: #d3cec3;
+		--ink: #14181c;
+		--ink-2: #474e56;
+		--ink-3: #515861;
 	}
 }
 
-* {
+*,
+*::before,
+*::after {
 	box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------- base */
+
+html {
+	-webkit-text-size-adjust: 100%;
 }
 
 body {
 	margin: 0;
-	padding: 0;
-	background: var(--background);
-	color: var(--text);
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	background: var(--board);
+	color: var(--board-ink);
+	font-family: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+		Arial, sans-serif;
 	font-size: 17px;
-	line-height: 1.65;
-	-webkit-text-size-adjust: 100%;
+	font-stretch: 100%;
+	line-height: 1.62;
+	font-synthesis-weight: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
 }
 
-.wrap {
-	max-width: 720px;
-	margin: 0 auto;
-	padding: 0 24px 80px;
+/*
+	The board carries a faint construction grid — the drawing surface underneath the sheet.
+	20mm major, 4mm minor, at the scale the sheet is drawn to.
+*/
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background-image: linear-gradient(var(--board-rule) 1px, transparent 1px),
+		linear-gradient(90deg, var(--board-rule) 1px, transparent 1px);
+	background-size: 96px 96px;
+	opacity: 0.5;
+	mask-image: radial-gradient(ellipse 120% 80% at 50% 0%, #000 20%, transparent 78%);
 }
 
-header.site {
-	border-bottom: 1px solid var(--border);
-	margin-bottom: 40px;
+body > * {
+	position: relative;
+	z-index: 1;
 }
 
-header.site .wrap {
-	padding-top: 24px;
-	padding-bottom: 20px;
+:where(a) {
+	color: inherit;
 }
 
-.brand {
-	font-weight: 600;
-	font-size: 18px;
+:focus-visible {
+	outline: 2px solid var(--oxide);
+	outline-offset: 3px;
+}
+
+.sheet :focus-visible {
+	outline-color: var(--oxide);
+}
+
+::selection {
+	background: var(--oxide);
+	color: var(--sheet);
+}
+
+.skip {
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	z-index: 50;
+	background: var(--sheet);
+	color: var(--ink);
+	padding: var(--sp-3) var(--sp-5);
+	font-stretch: 76%;
+	font-weight: 650;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-size: 13px;
 	text-decoration: none;
-	color: var(--text);
 }
 
-nav {
-	margin-top: 8px;
-	font-size: 15px;
+.skip:focus {
+	left: var(--sp-5);
+	top: var(--sp-3);
 }
 
-nav a {
-	color: var(--text-muted);
-	text-decoration: none;
-	margin-right: 18px;
+/* ------------------------------------------------------------ annotation type */
+
+/*
+	Annotation rank is expressed by width, exactly as it is by a drafting pen's nib.
+	.note is the narrowest and smallest: sheet metadata, leaders, callout labels.
+*/
+.note {
+	font-stretch: 74%;
+	font-weight: 640;
+	text-transform: uppercase;
+	letter-spacing: 0.13em;
+	font-size: 11.5px;
+	line-height: 1.4;
+	color: var(--ink-3);
 }
 
-nav a:hover,
-nav a:focus {
-	color: var(--accent);
-	text-decoration: underline;
+.note--board {
+	color: var(--board-ink-2);
 }
 
-h1 {
-	font-size: 34px;
-	line-height: 1.2;
-	margin: 0 0 8px;
+.note--oxide {
+	color: var(--oxide);
 }
 
-h2 {
-	font-size: 22px;
-	margin: 40px 0 12px;
-}
-
-h3 {
-	font-size: 18px;
-	margin: 28px 0 8px;
-}
-
-.lead {
-	font-size: 19px;
-	color: var(--text-muted);
-	margin-top: 0;
-}
-
-a {
-	color: var(--accent);
-}
-
-ul {
-	padding-left: 22px;
-}
-
-li {
-	margin-bottom: 6px;
-}
-
-.card {
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: 12px;
-	padding: 20px 24px;
-	margin: 24px 0;
-}
-
-.card h3 {
-	margin-top: 0;
-}
-
-.card p:last-child {
-	margin-bottom: 0;
-}
-
-.key-point {
+/* dimension values: tabular, so a column of measurements aligns like a schedule */
+.dim {
+	font-stretch: 78%;
 	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.03em;
+	color: var(--oxide);
 }
 
-.meta {
-	color: var(--text-muted);
-	font-size: 15px;
-}
-
-footer.site {
-	border-top: 1px solid var(--border);
-	margin-top: 60px;
-	padding-top: 24px;
-	color: var(--text-muted);
-	font-size: 15px;
+code,
+kbd,
+samp,
+.mono {
+	font-family: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+	font-size: 0.88em;
+	letter-spacing: 0;
 }
 
 code {
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: 4px;
+	background: var(--sheet-sunk);
+	border: 1px solid var(--rule);
 	padding: 1px 5px;
+	color: var(--ink);
+}
+
+/* an identifier inside an annotation label keeps its own case: package IDs are case-sensitive */
+.note code,
+.note--board code {
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------------- header */
+
+.masthead {
+	border-bottom: 1px solid var(--board-rule);
+}
+
+.masthead__inner {
+	max-width: var(--sheet-max);
+	margin: 0 auto;
+	padding: var(--sp-4) var(--sp-5);
+	display: flex;
+	align-items: center;
+	gap: var(--sp-5);
+	flex-wrap: wrap;
+}
+
+.mark {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--sp-3);
+	text-decoration: none;
+	color: var(--board-ink);
+	margin-right: auto;
+}
+
+/*
+	The studio mark, as delivered: a dark full-tone illustration. On the near-black board it
+	needs a hairline to sit on rather than dissolve into, so it reads as a mounted chip.
+*/
+.mark__glyph {
+	width: 36px;
+	height: 36px;
+	flex: none;
+	display: block;
+	border: 1px solid var(--board-rule);
+}
+
+.mark__name {
+	font-stretch: 80%;
+	font-weight: 700;
+	letter-spacing: 0.055em;
+	text-transform: uppercase;
 	font-size: 15px;
+	line-height: 1;
+}
+
+.nav {
+	display: flex;
+	align-items: center;
+	gap: var(--sp-5);
+	flex-wrap: wrap;
+}
+
+.nav a {
+	font-stretch: 76%;
+	font-weight: 620;
+	text-transform: uppercase;
+	letter-spacing: 0.11em;
+	font-size: 12px;
+	color: var(--board-ink-2);
+	text-decoration: none;
+	padding: 4px 0;
+	border-bottom: 1px solid transparent;
+	transition: color 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+
+.nav a:hover {
+	color: var(--board-ink);
+	border-bottom-color: var(--oxide);
+}
+
+.nav a[aria-current="page"] {
+	color: var(--board-ink);
+	border-bottom-color: var(--board-rule-strong);
+}
+
+/* -------------------------------------------------------------------- sheet */
+
+.sheet {
+	max-width: var(--sheet-max);
+	margin: var(--sp-7) auto;
+	background: var(--sheet);
+	color: var(--ink);
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05), 0 26px 64px -22px rgba(0, 0, 0, 0.72),
+		0 4px 14px -6px rgba(0, 0, 0, 0.5);
+}
+
+/*
+	A document sheet is trimmed narrower than a drawing sheet. Privacy, support and 404 carry
+	only text, so the full drawing width would leave half the sheet blank beside the column.
+*/
+.sheet--doc {
+	max-width: 880px;
+}
+
+/* the drawn border: a real sheet has a frame inset from its trimmed edge */
+.sheet__frame {
+	border: 1px solid var(--rule-strong);
+	margin: 10px;
+	padding: var(--sp-6) var(--sp-7) 0;
+}
+
+.sheet__frame > *:last-child {
+	margin-bottom: 0;
+}
+
+/* -------------------------------------------------------------------- plate */
+
+/*
+	A plate is one drawn figure with its annotation. The first viewport is a plate with the
+	title block set into its lower left, the way a drawing carries its own identification —
+	not a centred hero.
+*/
+.plate {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+	gap: var(--sp-7);
+	align-items: center;
+	padding-bottom: var(--sp-6);
+	margin-bottom: var(--sp-6);
+}
+
+.plate__figure {
+	grid-column: 2;
+	grid-row: 1;
+	min-width: 0;
+}
+
+.plate__figure svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+
+.titleblock {
+	grid-column: 1;
+	grid-row: 1;
+	min-width: 0;
+}
+
+.titleblock__rule {
+	height: 1px;
+	background: var(--ink);
+	margin-bottom: var(--sp-4);
+}
+
+h1 {
+	font-stretch: 84%;
+	font-weight: 720;
+	font-size: clamp(2.6rem, 6.2vw, 4.15rem);
+	line-height: 1.02;
+	letter-spacing: -0.022em;
+	margin: 0 0 var(--sp-4);
+	text-wrap: balance;
+}
+
+.lead {
+	font-size: clamp(1.06rem, 1.6vw, 1.24rem);
+	line-height: 1.5;
+	color: var(--ink-2);
+	max-width: 46ch;
+	margin: 0 0 var(--sp-6);
+	text-wrap: pretty;
+}
+
+/*
+	A document sheet has no figure: the title block sits alone above the text. Used for the
+	privacy policy and support, where the content is the drawing.
+*/
+.docblock {
+	padding-bottom: var(--sp-6);
+	border-bottom: 1px solid var(--rule);
+	margin-bottom: var(--sp-7);
+}
+
+.docblock .lead {
+	margin-bottom: var(--sp-4);
+}
+
+/* ------------------------------------------------------------------ actions */
+
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--sp-4) var(--sp-5);
+}
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--sp-3);
+	background: var(--ink);
+	color: var(--sheet);
+	border: 1px solid var(--ink);
+	padding: 13px var(--sp-5);
+	font-stretch: 78%;
+	font-weight: 660;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-size: 12.5px;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background 0.18s var(--ease), color 0.18s var(--ease),
+		transform 0.18s var(--ease);
+}
+
+.btn:hover {
+	background: var(--oxide);
+	border-color: var(--oxide);
+	color: #fff;
+}
+
+.btn:active {
+	transform: translateY(1px);
+}
+
+.btn--ghost {
+	background: transparent;
+	color: var(--ink);
+	border-color: var(--rule-strong);
+}
+
+.btn--ghost:hover {
+	background: transparent;
+	color: var(--oxide);
+	border-color: var(--oxide);
+}
+
+/*
+	Not a button: TiltFlow is in review and has no reachable listing. A disabled control
+	that looks pressable is a lie, so the pending state is drawn as a stamp instead.
+*/
+.stamp {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--sp-3);
+	border: 1px solid var(--oxide);
+	color: var(--oxide);
+	background: var(--oxide-soft);
+	padding: 11px var(--sp-4);
+	font-stretch: 74%;
+	font-weight: 660;
+	text-transform: uppercase;
+	letter-spacing: 0.11em;
+	font-size: 11.5px;
+}
+
+.stamp__dot {
+	width: 6px;
+	height: 6px;
+	background: var(--oxide);
+	flex: none;
+}
+
+/* -------------------------------------------------------------------- prose */
+
+.prose {
+	max-width: var(--measure-col);
+}
+
+h2 {
+	font-stretch: 82%;
+	font-weight: 700;
+	font-size: clamp(1.5rem, 2.6vw, 1.95rem);
+	line-height: 1.16;
+	letter-spacing: -0.012em;
+	margin: var(--sp-9) 0 var(--sp-4);
+	text-wrap: balance;
+}
+
+h3 {
+	font-stretch: 86%;
+	font-weight: 680;
+	font-size: 1.14rem;
+	line-height: 1.28;
+	margin: var(--sp-7) 0 var(--sp-3);
+	text-wrap: balance;
+}
+
+h2 + h3,
+h2 + * > h3:first-child {
+	margin-top: var(--sp-5);
+}
+
+/* a heading that already follows a ruled block does not also need a full section gap */
+.docblock + .prose > h2:first-child,
+.docblock + section > h2:first-child,
+.notes-block + .prose > h2:first-child,
+.plate + .prose > h2:first-child,
+.sheet__frame > .prose:first-child > h2:first-child {
+	margin-top: var(--sp-5);
+}
+
+/* small sentence-case note — for asides that should not shout in tracked caps */
+.small {
+	font-size: 14.5px;
+	line-height: 1.5;
+	color: var(--ink-3);
+	max-width: 56ch;
+}
+
+p {
+	margin: 0 0 var(--sp-5);
+	max-width: var(--measure-col);
+	text-wrap: pretty;
+}
+
+.prose ul,
+.prose ol {
+	max-width: var(--measure-col);
+	padding-left: 0;
+	margin: 0 0 var(--sp-5);
+	list-style: none;
+}
+
+.prose li {
+	position: relative;
+	padding-left: var(--sp-6);
+	margin-bottom: var(--sp-3);
+}
+
+/* the leader tick of a drawing's note list */
+.prose li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.72em;
+	width: 14px;
+	height: 1px;
+	background: var(--oxide);
+}
+
+.prose ol {
+	counter-reset: step;
+}
+
+.prose ol li::before {
+	counter-increment: step;
+	content: counter(step);
+	top: 0;
+	width: auto;
+	height: auto;
+	background: none;
+	color: var(--oxide);
+	font-stretch: 76%;
+	font-weight: 660;
+	font-variant-numeric: tabular-nums;
+	font-size: 12px;
+	letter-spacing: 0.06em;
+	line-height: inherit;
+}
+
+.prose a {
+	color: var(--ink);
+	text-decoration: none;
+	border-bottom: 1px solid var(--oxide);
+	padding-bottom: 1px;
+	transition: background 0.16s var(--ease), color 0.16s var(--ease);
+}
+
+.prose a:hover {
+	background: var(--oxide);
+	color: #fff;
+	border-bottom-color: var(--oxide);
+}
+
+strong,
+.key-point {
+	font-weight: 660;
+	color: var(--ink);
+}
+
+em {
+	font-style: normal;
+	font-stretch: 88%;
+	font-weight: 600;
+	color: var(--oxide);
+}
+
+/* ------------------------------------------------------------------- callout */
+
+/*
+	A note block on a drawing: hatched left margin, the note itself set in the sheet's
+	sunk tone. Used for the claims a reviewer is checking.
+*/
+.callout {
+	background: var(--sheet-sunk);
+	border: 1px solid var(--rule);
+	padding: var(--sp-5) var(--sp-6);
+	margin: var(--sp-6) 0;
+	max-width: var(--measure-col);
+}
+
+.callout > *:last-child {
+	margin-bottom: 0;
+}
+
+.callout__label {
+	display: block;
+	margin-bottom: var(--sp-3);
+}
+
+/* --------------------------------------------------------------- drawing notes */
+
+/*
+	The notes block a drawing carries beside the object: short, numbered facts a reader can
+	check. Deliberately set at reading size — these are annotations, not a metrics banner.
+*/
+.notes-block {
+	border-top: 1px solid var(--rule);
+	border-bottom: 1px solid var(--rule);
+	padding: var(--sp-5) 0;
+	margin-bottom: var(--sp-8);
+}
+
+.notes-row {
+	list-style: none;
+	padding: 0;
+	margin: var(--sp-3) 0 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+	gap: var(--sp-4) var(--sp-6);
+}
+
+.notes-row li {
+	position: relative;
+	padding-left: var(--sp-6);
+	font-size: 15.5px;
+	line-height: 1.45;
+	color: var(--ink-2);
+}
+
+.notes-row li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.7em;
+	width: 14px;
+	height: 1px;
+	background: var(--oxide);
+}
+
+/* ----------------------------------------------------------------- mark plate */
+
+/*
+	The studio mark itself, mounted on the sheet: a plate pasted onto a drawing, with its
+	frame, its registration corners and its annotation. The artwork is a dark full-tone
+	illustration, so the frame is what stops it floating on the pale sheet.
+*/
+.markplate {
+	margin: 0;
+	position: relative;
+}
+
+.markplate__mount {
+	position: relative;
+	border: 1px solid var(--rule-strong);
+	background: var(--sheet-sunk);
+	padding: 10px;
+}
+
+.markplate__mount img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+/* registration corners, as on a mounted plate */
+.markplate__mount::before,
+.markplate__mount::after {
+	content: "";
+	position: absolute;
+	width: 13px;
+	height: 13px;
+	border: 1px solid var(--oxide);
+	pointer-events: none;
+}
+
+.markplate__mount::before {
+	top: -1px;
+	left: -1px;
+	border-right: 0;
+	border-bottom: 0;
+}
+
+.markplate__mount::after {
+	bottom: -1px;
+	right: -1px;
+	border-left: 0;
+	border-top: 0;
+}
+
+.markplate figcaption {
+	margin-top: var(--sp-4);
+	padding-top: var(--sp-3);
+	border-top: 1px solid var(--rule);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--sp-2) var(--sp-4);
+}
+
+.markplate__name {
+	font-stretch: 78%;
+	font-weight: 660;
+	font-size: 14px;
+	letter-spacing: 0.06em;
+	color: var(--oxide);
+	text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ specimens */
+
+/*
+	Screenshots are mounted on the sheet as specimens, each with its reference and note —
+	the way a photographic plate is pasted onto a drawing and annotated.
+*/
+.specimens {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
+	gap: var(--sp-6);
+	margin: var(--sp-7) 0 var(--sp-8);
+}
+
+.specimen {
+	margin: 0;
+}
+
+.specimen img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border: 1px solid var(--rule-strong);
+	background: var(--sheet-sunk);
+}
+
+.specimen figcaption {
+	margin-top: var(--sp-3);
+	padding-top: var(--sp-3);
+	border-top: 1px solid var(--rule);
+	font-size: 14px;
+	line-height: 1.45;
+	color: var(--ink-2);
+}
+
+.specimen figcaption .note {
+	display: block;
+	margin-bottom: 3px;
+}
+
+/* --------------------------------------------------------------- schedule */
+
+/*
+	A specification schedule. Reads as a table of facts a reviewer can check line by line,
+	which is exactly what it is.
+*/
+.schedule {
+	width: 100%;
+	border-collapse: collapse;
+	margin: var(--sp-5) 0 var(--sp-6);
+	font-size: 15.5px;
+}
+
+.schedule caption {
+	text-align: left;
+	margin-bottom: var(--sp-3);
+	font-stretch: 74%;
+	font-weight: 640;
+	text-transform: uppercase;
+	letter-spacing: 0.13em;
+	font-size: 11.5px;
+	color: var(--ink-3);
+}
+
+.schedule th,
+.schedule td {
+	text-align: left;
+	vertical-align: top;
+	padding: var(--sp-3) var(--sp-4) var(--sp-3) 0;
+	border-bottom: 1px solid var(--rule);
+}
+
+.schedule th {
+	font-stretch: 78%;
+	font-weight: 640;
+	letter-spacing: 0.02em;
+	color: var(--ink);
+	width: 40%;
+}
+
+.schedule td {
+	color: var(--ink-2);
+}
+
+.schedule tr:last-child th,
+.schedule tr:last-child td {
+	border-bottom: 0;
+}
+
+/* --------------------------------------------------------------- index list */
+
+/*
+	The drawing index: how products are listed. Each entry is a plate reference, which
+	means a second application slots in as one more row and nothing is redesigned.
+*/
+.index {
+	list-style: none;
+	padding: 0;
+	margin: var(--sp-6) 0 0;
+	border-top: 1px solid var(--rule-strong);
+}
+
+/* the index sits inside .prose, so the note-list indent and leader tick are reset off it */
+.index__item {
+	border-bottom: 1px solid var(--rule);
+	padding-left: 0;
+	margin-bottom: 0;
+}
+
+.index__item::before {
+	display: none;
+}
+
+.index__link {
+	display: grid;
+	grid-template-columns: 84px minmax(0, 1fr) auto;
+	gap: var(--sp-5);
+	align-items: baseline;
+	padding: var(--sp-5) var(--sp-4);
+	margin: 0 calc(var(--sp-4) * -1);
+	text-decoration: none;
+	color: inherit;
+	/* background and an inset rule only: animating padding thrashes layout */
+	transition: background 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.index__link:hover {
+	background: var(--sheet-sunk);
+	box-shadow: inset 3px 0 0 var(--oxide);
+}
+
+.index__plate {
+	font-stretch: 74%;
+	font-weight: 640;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.1em;
+	font-size: 11.5px;
+	color: var(--oxide);
+	text-transform: uppercase;
+}
+
+.index__title {
+	display: block;
+	font-stretch: 86%;
+	font-weight: 690;
+	font-size: 1.3rem;
+	letter-spacing: -0.008em;
+	margin: 0 0 var(--sp-2);
+	line-height: 1.2;
+}
+
+.index__desc {
+	display: block;
+	color: var(--ink-2);
+	font-size: 15.5px;
+	margin: 0;
+	max-width: 52ch;
+	line-height: 1.5;
+}
+
+.index__status {
+	font-stretch: 74%;
+	font-weight: 640;
+	text-transform: uppercase;
+	letter-spacing: 0.11em;
+	font-size: 11px;
+	color: var(--oxide);
+	white-space: nowrap;
+}
+
+/* ------------------------------------------------------------ fault schedule */
+
+/*
+	Support is a fault-finding schedule, the way a maintenance manual states it: symptom,
+	then the checks in the order they should be made.
+*/
+.fault {
+	border-top: 1px solid var(--rule-strong);
+	margin-top: var(--sp-6);
+}
+
+.fault__row {
+	border-bottom: 1px solid var(--rule);
+	padding: var(--sp-6) 0;
+	display: grid;
+	grid-template-columns: 84px minmax(0, 1fr);
+	gap: var(--sp-5);
+	align-items: start;
+}
+
+.fault__ref {
+	font-stretch: 74%;
+	font-weight: 640;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.1em;
+	font-size: 11.5px;
+	color: var(--oxide);
+	text-transform: uppercase;
+	padding-top: 0.35em;
+}
+
+.fault__body > *:last-child {
+	margin-bottom: 0;
+}
+
+.fault h3 {
+	margin-top: 0;
+	margin-bottom: var(--sp-3);
+}
+
+/* --------------------------------------------------------------- title block */
+
+/*
+	The footer is the sheet's title block: who drew it, what it is, when it was revised,
+	and where to write. Same object a real drawing carries in its corner.
+*/
+.colophon {
+	border-top: 1px solid var(--ink);
+	margin-top: var(--sp-9);
+	padding: var(--sp-6) 0 var(--sp-7);
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+	gap: var(--sp-6) var(--sp-5);
+}
+
+.colophon__cell > * + * {
+	margin-top: var(--sp-2);
+}
+
+.colophon__value {
+	font-stretch: 86%;
+	font-weight: 620;
+	font-size: 15px;
+	line-height: 1.45;
+	color: var(--ink);
+}
+
+.colophon a {
+	color: var(--ink);
+	text-decoration: none;
+	border-bottom: 1px solid var(--rule-strong);
+	transition: border-color 0.16s var(--ease), color 0.16s var(--ease);
+}
+
+.colophon a:hover {
+	color: var(--oxide);
+	border-bottom-color: var(--oxide);
+}
+
+.footnote {
+	max-width: var(--sheet-max);
+	margin: 0 auto;
+	padding: 0 var(--sp-5) var(--sp-8);
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--sp-3) var(--sp-5);
+	justify-content: space-between;
+}
+
+/* ------------------------------------------------------------------ drawing */
+
+/*
+	Shared drawing primitives. Everything drawn on the sheet uses these, so the plates
+	stay one hand.
+*/
+.d-line {
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 1.25;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+
+.d-thin {
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 0.7;
+	opacity: 0.5;
+}
+
+.d-hatch {
+	fill: url(#hatch);
+	stroke: var(--ink);
+	stroke-width: 1.1;
+	stroke-linejoin: round;
+}
+
+.d-fill {
+	fill: var(--ink);
+}
+
+.d-slit {
+	fill: var(--measure);
+}
+
+/* dimension work is always oxide, never ink — it is annotation, not the object */
+.d-dim {
+	fill: none;
+	stroke: var(--oxide);
+	stroke-width: 1;
+}
+
+.d-dim-fill {
+	fill: var(--oxide);
+}
+
+.d-datum {
+	fill: none;
+	stroke: var(--oxide);
+	stroke-width: 1;
+	stroke-dasharray: 9 4 2 4;
+	opacity: 0.85;
+}
+
+.d-label {
+	font-stretch: 74%;
+	font-weight: 640;
+	font-size: 11px;
+	letter-spacing: 0.11em;
+	text-transform: uppercase;
+	fill: var(--ink-3);
+}
+
+.d-value {
+	font-stretch: 78%;
+	font-weight: 660;
+	font-size: 13px;
+	letter-spacing: 0.03em;
+	font-variant-numeric: tabular-nums;
+	fill: var(--oxide);
+}
+
+.d-value--measure {
+	fill: var(--measure);
+}
+
+/* ------------------------------------------------------------- tilt drawing */
+
+.tiltfig svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+	touch-action: pan-y;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.tiltctl {
+	display: block;
+	margin-top: var(--sp-4);
+	padding-top: var(--sp-4);
+	border-top: 1px solid var(--rule);
+}
+
+.tiltctl .note,
+.tiltctl .small {
+	display: block;
+	margin-bottom: var(--sp-3);
+}
+
+.tiltctl__live {
+	margin: var(--sp-3) 0 0;
+	color: var(--ink-3);
+}
+
+/* a drafting slide-rule cursor rather than a stock range control */
+#tiltrange {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 100%;
+	height: 22px;
+	background: transparent;
+	cursor: ew-resize;
+	margin: 0;
+	display: block;
+}
+
+#tiltrange::-webkit-slider-runnable-track {
+	height: 22px;
+	background: linear-gradient(var(--rule-strong), var(--rule-strong)) center / 100% 1px no-repeat,
+		linear-gradient(var(--rule-strong), var(--rule-strong)) center / 1px 11px no-repeat;
+}
+
+#tiltrange::-moz-range-track {
+	height: 22px;
+	background: linear-gradient(var(--rule-strong), var(--rule-strong)) center / 100% 1px no-repeat,
+		linear-gradient(var(--rule-strong), var(--rule-strong)) center / 1px 11px no-repeat;
+}
+
+#tiltrange::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 3px;
+	height: 22px;
+	background: var(--oxide);
+	border: 0;
+	border-radius: 0;
+}
+
+#tiltrange::-moz-range-thumb {
+	width: 3px;
+	height: 22px;
+	background: var(--oxide);
+	border: 0;
+	border-radius: 0;
+}
+
+#tiltrange:focus-visible {
+	outline: 2px solid var(--oxide);
+	outline-offset: 4px;
+}
+
+/* ------------------------------------------------------------------- motion */
+
+/*
+	One authored moment: the dimension work draws itself on, the way a drafter inks the
+	annotation after the object is already on the sheet. The object never animates in —
+	content is visible by default.
+*/
+@keyframes ink-on {
+	from {
+		stroke-dashoffset: var(--len, 400);
+	}
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+
+@keyframes ink-fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.ink-on {
+	stroke-dasharray: var(--len, 400);
+	animation: ink-on 1.15s var(--ease) 0.25s both;
+}
+
+.ink-fade {
+	animation: ink-fade 0.7s var(--ease) 1s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-delay: 0ms !important;
+		transition-duration: 0.001ms !important;
+	}
+
+	.ink-on {
+		stroke-dasharray: none;
+	}
+}
+
+/* --------------------------------------------------------------- responsive */
+
+@media (max-width: 900px) {
+	.plate {
+		grid-template-columns: minmax(0, 1fr);
+		gap: var(--sp-6);
+		align-items: start;
+	}
+
+	/*
+		On a phone the name comes first: a visitor needs to know what this is before the
+		drawing earns their attention. On desktop they sit side by side and both are read.
+	*/
+	.titleblock {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	.plate__figure {
+		grid-column: 1;
+		grid-row: 2;
+		max-width: 400px;
+		width: 100%;
+	}
+}
+
+@media (max-width: 700px) {
+	body {
+		font-size: 16.5px;
+	}
+
+	.sheet {
+		margin: var(--sp-5) auto;
+	}
+
+	.sheet__frame {
+		margin: 7px;
+		padding: var(--sp-6) var(--sp-5) 0;
+	}
+
+	h2 {
+		margin-top: var(--sp-8);
+	}
+
+	.index__link {
+		grid-template-columns: minmax(0, 1fr);
+		gap: var(--sp-2);
+	}
+
+	.index__link:hover {
+		padding-left: var(--sp-3);
+		padding-right: var(--sp-3);
+	}
+
+	.index__status {
+		margin-top: var(--sp-2);
+	}
+
+	.fault__row {
+		grid-template-columns: minmax(0, 1fr);
+		gap: var(--sp-2);
+	}
+
+	.schedule th {
+		width: auto;
+	}
+
+	.schedule th,
+	.schedule td {
+		display: block;
+		padding-bottom: 0;
+		border-bottom: 0;
+	}
+
+	.schedule td {
+		padding-top: var(--sp-1);
+		padding-bottom: var(--sp-4);
+		border-bottom: 1px solid var(--rule);
+	}
+
+	.masthead__inner {
+		gap: var(--sp-3) var(--sp-5);
+	}
+
+	.nav {
+		gap: var(--sp-4);
+		width: 100%;
+	}
+
+	/* 44px touch targets: the product is for people who find precise tapping hard */
+	.nav a {
+		padding: 10px 0;
+	}
+}
+
+@media (max-width: 420px) {
+	.sheet__frame {
+		padding-left: var(--sp-4);
+		padding-right: var(--sp-4);
+	}
+
+	.actions {
+		gap: var(--sp-3);
+	}
+
+	.btn {
+		width: 100%;
+		justify-content: center;
+	}
+
+	/*
+		The stamp stays inline and left-aligned at every width. Stretching it to match the
+		button beside it would make a non-interactive element look pressable, which is the
+		exact thing it exists to avoid.
+	*/
+	.stamp {
+		width: auto;
+	}
+}
+
+/* ---------------------------------------------------------------------- print */
+
+@media print {
+	body {
+		background: #fff;
+		color: #000;
+	}
+
+	body::before,
+	.masthead,
+	.footnote {
+		display: none;
+	}
+
+	.sheet {
+		box-shadow: none;
+		margin: 0;
+		max-width: none;
+	}
 }
