@@ -1,8 +1,14 @@
-# Working records, kept locally and not published.
-# This repository is public and serves GitHub Pages from its root, so anything committed
-# here is world-readable. These two files are notes to ourselves, not part of the site.
+# Working records, kept locally and never published.
+# This repository is public and serves GitHub Pages from its root, so anything committed here
+# is world-readable and attributable to a real Play developer identity. These files are notes
+# to ourselves — product truth and design reasoning — not part of the site.
 PRODUCT.md
 DESIGN.md
 
-# README.md is deliberately NOT ignored: it documents the repository for anyone who finds it,
-# including the constraints that must not be broken (URL stability, no third-party requests).
+# Tooling working data, not part of the site.
+.impeccable/
+.claude/
+
+# README.md is deliberately NOT ignored. It documents the repository for anyone who finds it,
+# including the constraints that must not be broken: URL stability for the Play Console, the
+# no-third-party rule, and .nojekyll. It carries no design reasoning — that lives in DESIGN.md.
