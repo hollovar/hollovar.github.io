@@ -395,7 +395,7 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
 		var mag = Math.abs(angle);
 
 		phone.setAttribute("transform",
-			"translate(" + PIVOT_X + " " + PIVOT_Y + ") rotate(" + angle.toFixed(2) + ")");
+			"translate(" + PIVOT_X + " " + PIVOT_Y + ") rotate(" + (-angle).toFixed(2) + ")");
 
 		// the dimensioned angle, swept from the datum
 		if (mag < 0.35) {
