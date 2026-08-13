@@ -484,13 +484,21 @@ if (window.DeviceOrientationEvent && !("requestPermission" in window.DeviceOrien
     var filteredGamma = null;
     var filterCoefficient = 0.15;
 
-    window.addEventListener("deviceorientation", function (e) {
+ window.addEventListener("deviceorientation", function (e) {
         if (e.gamma === null || e.gamma === undefined) return;
 
         userTookOver = true;
         hint.textContent = "Following your phone. Tilt it.";
 
-        var gamma = Math.max(-28, Math.min(28, e.gamma));
+        var gamma = e.gamma;
+
+        // Keep left/right tilt direction continuous across the
+        // Euler-angle representation boundary.
+        if (e.beta !== null && Math.abs(e.beta) > 90) {
+            gamma = -gamma;
+        }
+
+        gamma = Math.max(-28, Math.min(28, gamma));
 
         if (filteredGamma === null) {
             filteredGamma = gamma;
