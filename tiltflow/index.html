@@ -433,7 +433,7 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
     // Start gently at the threshold and accelerate progressively.
     t = t * t;
 
-    return t * 1.5 * (angle > 0 ? 1 : -1);
+    return t * 1.5 * (angle > 0 ? -1 : 1);
 }
 
 	var last = 0;
