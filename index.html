@@ -3,65 +3,200 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hollovar Labs</title>
-<meta name="description" content="Hollovar Labs builds small, private Android applications that do one thing well.">
+<title>Hollovar Labs — Independent Software Studio</title>
+<meta name="description" content="Hollovar Labs is an independent software studio building small, privacy-conscious Android tools, including the tilt-scrolling utility TiltFlow.">
+<link rel="canonical" href="https://hollovar.github.io/">
+<meta name="theme-color" content="#14181d">
+<link rel="icon" href="/assets/icon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/assets/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hollovar Labs">
+<meta property="og:title" content="Hollovar Labs — Independent Software Studio">
+<meta property="og:description" content="Small, privacy-conscious Android tools. TiltFlow scrolls the page when you tilt your phone, using an accessibility service that is declared unable to read your screen.">
+<meta property="og:url" content="https://hollovar.github.io/">
+<meta property="og:image" content="https://hollovar.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<header class="site">
-	<div class="wrap">
-		<a class="brand" href="/">Hollovar Labs</a>
-		<nav>
+<header class="masthead">
+	<div class="masthead__inner">
+		<a class="mark" href="/" aria-label="Hollovar Labs — home">
+			<img class="mark__glyph" src="/assets/mark-glyph.webp"
+				srcset="/assets/mark-glyph.webp 128w, /assets/mark-glyph@2x.webp 256w"
+				width="128" height="128" alt="" aria-hidden="true" decoding="async">
+			<span class="mark__name">Hollovar&nbsp;Labs</span>
+		</a>
+		<nav class="nav" aria-label="Primary">
+			<a href="/" aria-current="page">Studio</a>
 			<a href="/tiltflow/">TiltFlow</a>
+			<a href="/tiltflow/privacy/">Privacy</a>
 			<a href="/support/">Support</a>
 		</nav>
 	</div>
 </header>
 
-<main class="wrap">
+<main id="main" class="sheet">
+<div class="sheet__frame">
 
-	<h1>Hollovar Labs</h1>
-	<p class="lead">Small Android applications that do one thing well, and keep to themselves.</p>
+	<section class="plate">
+		<div class="plate__figure">
+			<figure class="markplate">
+				<div class="markplate__mount">
+					<img src="/assets/mark-plate.webp"
+						srcset="/assets/mark-plate.webp 760w, /assets/mark-plate@2x.webp 1200w"
+						sizes="(max-width: 900px) 400px, 46vw"
+						width="760" height="760" decoding="async"
+						alt="The Hollovar Labs mark: a raven perched on a castle keep, with a single lit window slit in the central tower.">
+				</div>
+				<figcaption>
+					<span class="markplate__name">Hollóvár</span>
+					<span class="small" style="margin:0">Raven castle, in Hungarian. The accents come off for
+					international use; the raven stays.</span>
+				</figcaption>
+			</figure>
+		</div>
 
-	<p>Hollovar Labs is an independent developer of Android software. The applications here
-	are built on a simple principle: an application should do its job on your device, and
-	should not need to know anything about you to do it.</p>
+		<div class="titleblock">
+			<div class="titleblock__rule"></div>
+			<h1>Hollovar Labs</h1>
+			<p class="lead">Small Android tools, engineered to do one job and to keep to
+			themselves. Built by one developer, documented like instruments.</p>
+			<div class="actions">
+				<a class="btn" href="/tiltflow/">See TiltFlow</a>
+				<a class="btn btn--ghost" href="/tiltflow/privacy/">Privacy policy</a>
+			</div>
+		</div>
+	</section>
 
-	<h2>Applications</h2>
+	<section class="notes-block" aria-label="Studio notes">
+		<p class="note">Notes</p>
+		<ul class="notes-row">
+			<li><span class="dim">0</span> third-party requests loaded by this website</li>
+			<li><span class="dim">0</span> Android permissions declared by TiltFlow, and one
+			accessibility service you switch on yourself</li>
+			<li><span class="dim">01</span> application, currently in review at Google Play</li>
+		</ul>
+	</section>
 
-	<div class="card">
-		<h3><a href="/tiltflow/">TiltFlow</a></h3>
-		<p>Hands-free scrolling for Android. Tilt your phone gently to one side and the page
-		scrolls for you, so you can read one-handed without swiping. It works only in the
-		applications you choose.</p>
-		<p class="meta">No accounts, no advertising, no network access.</p>
-	</div>
+	<section class="prose">
+		<h2>The studio</h2>
 
-	<h2>Privacy</h2>
+		<p>Hollovar Labs is an independent software studio. It publishes small Android
+		applications that solve a specific, ordinary problem and then get out of the way —
+		no accounts, no advertising, no analytics, and as few permissions as the job can be
+		done with.</p>
 
-	<p>Every Hollovar Labs application has its own privacy policy, and each one says the same
-	thing in different words: nothing is collected, and nothing leaves your device.</p>
+		<p>The name comes from the Hungarian <em>Hollóvár</em>, raven castle. The accents come
+		off for international use; the raven stays, for the reasons ravens are usually
+		invoked — attention, and a long memory.</p>
 
-	<ul>
-		<li><a href="/tiltflow/privacy/">TiltFlow privacy policy</a></li>
-	</ul>
+		<p>The software is written by one developer: a physicist with a doctorate and a career
+		spent on scientific and industrial software — measurement systems, instrumentation,
+		hardware and software that have to agree with each other, and desktop and mobile
+		applications in C#, .NET and Android. That background is the whole explanation for how
+		these applications are built. An instrument that quietly makes up its readings is
+		worthless, and so is an application that quietly makes up what it does with your
+		data.</p>
+	</section>
 
-	<p>This website loads no fonts, scripts, analytics or resources from any other company.
-	Nothing here tracks you either.</p>
+	<section class="prose">
+		<h2>Applications</h2>
 
-	<h2>Contact</h2>
+		<ul class="index">
+			<li class="index__item">
+				<a class="index__link" href="/tiltflow/">
+					<span class="index__plate">Plate 01</span>
+					<span>
+						<span class="index__title">TiltFlow</span>
+						<span class="index__desc">Tilt your Android phone gently to one side and
+						the page scrolls itself, in the applications you choose. Free, ad-free,
+						and the one thing it asks for cannot read your screen.</span>
+					</span>
+					<span class="index__status">In review</span>
+				</a>
+			</li>
+		</ul>
 
-	<p>Questions, problems and suggestions are welcome on the
-	<a href="/support/">support page</a>.</p>
+		<p class="small" style="margin-top:var(--sp-5)">Further applications will be added to this
+		index as they are published.</p>
+	</section>
 
+	<section class="prose">
+		<h2>Privacy is a build decision, not a policy page</h2>
+
+		<p>Most applications ask you to trust a paragraph. The more useful thing is to remove
+		the capability, so the paragraph has nothing to promise.</p>
+
+		<p>TiltFlow asks you for exactly one thing: permission to run its accessibility service,
+		which you switch on yourself in Android's settings. Android allows no other route for
+		an application to swipe on your behalf, and swiping is the entire product. You can
+		switch it off in the same place at any time.</p>
+
+		<p>What it never asks for is everything else. The released build declares
+		<strong>no Android permissions</strong> — not even internet permission — so it has no
+		route by which to send anything anywhere. And the service is declared
+		<code>canRetrieveWindowContent="false"</code>, so Android will not hand it the contents
+		of your screen at all. It is <em>unable</em> to read your screen, rather than promising
+		not to. Both are in the application's manifest, where anyone can check them.</p>
+
+		<div class="callout">
+			<span class="note callout__label">Note — this website</span>
+			<p>This page loads no fonts, scripts, analytics, trackers or resources from any
+			other company's server. Everything it needs, including its typeface, is served
+			from this domain. A site whose subject is privacy should not leak its visitors to
+			a third party on the way to saying so. You can verify it in your browser's network
+			panel in about ten seconds.</p>
+		</div>
+
+		<p>Each application carries its own privacy policy, and each says the same thing in
+		different words: nothing is collected, and nothing leaves your device.</p>
+
+		<ul>
+			<li><a href="/tiltflow/privacy/">TiltFlow privacy policy</a></li>
+		</ul>
+	</section>
+
+	<section class="prose">
+		<h2>Contact</h2>
+
+		<p>Questions, compatibility reports and suggestions are all welcome, and they reach
+		the person who wrote the code. The <a href="/support/">support page</a> has the
+		common questions and the address.</p>
+	</section>
+
+	<footer class="colophon">
+		<div class="colophon__cell">
+			<p class="note">Studio</p>
+			<p class="colophon__value">Hollovar Labs<br>Independent software studio</p>
+		</div>
+		<div class="colophon__cell">
+			<p class="note">Contact</p>
+			<p class="colophon__value"><a href="mailto:hollovarlabs@gmail.com">hollovarlabs@gmail.com</a></p>
+		</div>
+		<div class="colophon__cell">
+			<p class="note">Documents</p>
+			<p class="colophon__value"><a href="/tiltflow/privacy/">TiltFlow privacy policy</a><br><a href="/support/">Support</a></p>
+		</div>
+		<div class="colophon__cell">
+			<p class="note">Sheet</p>
+			<p class="colophon__value">01 · Studio</p>
+		</div>
+	</footer>
+
+</div>
 </main>
 
-<footer class="site">
-	<div class="wrap">
-		<p>Hollovar Labs</p>
-	</div>
-</footer>
+<div class="footnote">
+	<p class="note note--board">© 2026 Hollovar Labs</p>
+	<p class="note note--board">No trackers · No analytics · No third-party requests</p>
+</div>
 
 </body>
 </html>
