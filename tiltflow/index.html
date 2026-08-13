@@ -425,11 +425,16 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
 	}
 
 	function speed() {
-		if (!scrolling) return 0;
-		var mag = Math.abs(angle);
-		var t = Math.min(1, Math.max(0, (mag - START) / (FULL - START)));
-		return (0.35 + t * 2.65) * (angle > 0 ? 1 : -1);
-	}
+    if (!scrolling) return 0;
+
+    var mag = Math.abs(angle);
+    var t = Math.min(1, Math.max(0, (mag - START) / (FULL - START)));
+
+    // Start gently at the threshold and accelerate progressively.
+    t = t * t;
+
+    return t * 1.5 * (angle > 0 ? 1 : -1);
+}
 
 	var last = 0;
 	function frame(now) {
@@ -474,15 +479,28 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
 	svg.addEventListener("pointercancel", function () { dragging = false; });
 	svg.style.cursor = "ew-resize";
 
-	// on a phone, the drawing follows the phone
-	if (window.DeviceOrientationEvent && !("requestPermission" in window.DeviceOrientationEvent)) {
-		window.addEventListener("deviceorientation", function (e) {
-			if (e.gamma === null || e.gamma === undefined) return;
-			userTookOver = true;
-			hint.textContent = "Following your phone. Tilt it.";
-			setAngle(Math.max(-28, Math.min(28, e.gamma)), false);
-		}, { passive: true });
-	}
+	// On a phone, the drawing follows the phone with light low-pass filtering.
+if (window.DeviceOrientationEvent && !("requestPermission" in window.DeviceOrientationEvent)) {
+    var filteredGamma = null;
+    var filterCoefficient = 0.15;
+
+    window.addEventListener("deviceorientation", function (e) {
+        if (e.gamma === null || e.gamma === undefined) return;
+
+        userTookOver = true;
+        hint.textContent = "Following your phone. Tilt it.";
+
+        var gamma = Math.max(-28, Math.min(28, e.gamma));
+
+        if (filteredGamma === null) {
+            filteredGamma = gamma;
+        } else {
+            filteredGamma += filterCoefficient * (gamma - filteredGamma);
+        }
+
+        setAngle(filteredGamma, false);
+    }, { passive: true });
+}
 
 	render();
 
