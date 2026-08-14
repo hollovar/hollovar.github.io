@@ -395,7 +395,7 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
 		var mag = Math.abs(angle);
 
 		phone.setAttribute("transform",
-			"translate(" + PIVOT_X + " " + PIVOT_Y + ") rotate(" + (-angle).toFixed(2) + ")");
+			"translate(" + PIVOT_X + " " + PIVOT_Y + ") rotate(" + angle.toFixed(2) + ")");
 
 		// the dimensioned angle, swept from the datum
 		if (mag < 0.35) {
@@ -433,7 +433,7 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
     // Start gently at the threshold and accelerate progressively.
     t = t * t;
 
-    return t * 1.5 * (angle > 0 ? -1 : 1);
+    return t * 1.5 * (angle > 0 ? 1 : -1);
 }
 
 	var last = 0;
@@ -490,7 +490,10 @@ if (window.DeviceOrientationEvent && !("requestPermission" in window.DeviceOrien
         userTookOver = true;
         hint.textContent = "Following your phone. Tilt it.";
 
-        var gamma = e.gamma;
+        // The drawing's angle is the visual one: positive leans right, the way
+        // px() sweeps and the way the 12°/20° rays are struck. gamma runs the
+        // other way, so it is negated once, here, at the source.
+        var gamma = -e.gamma;
 
         // Keep left/right tilt direction continuous across the
         // Euler-angle representation boundary.
