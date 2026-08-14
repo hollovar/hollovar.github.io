@@ -491,9 +491,9 @@ if (window.DeviceOrientationEvent && !("requestPermission" in window.DeviceOrien
         hint.textContent = "Following your phone. Tilt it.";
 
         // The drawing's angle is the visual one: positive leans right, the way
-        // px() sweeps and the way the 12°/20° rays are struck. gamma runs the
-        // other way, so it is negated once, here, at the source.
-        var gamma = -e.gamma;
+        // px() sweeps and the way the 12°/20° rays are struck. gamma is already
+        // positive to the right, so it carries straight through.
+        var gamma = e.gamma;
 
         // Keep left/right tilt direction continuous across the
         // Euler-angle representation boundary.
