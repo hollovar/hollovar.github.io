@@ -30,6 +30,7 @@ without any published URL ever changing:
 
 ```text
 /                      Hollovar Labs home (studio)
+/privacy/              studio-wide privacy page, indexing every application policy
 /support/              shared support and contact page
 /tiltflow/             TiltFlow product page
 /tiltflow/privacy/     TiltFlow privacy policy
@@ -112,6 +113,7 @@ Repository → Settings → Pages → Source: *Deploy from a branch*, branch `ma
 
 - `https://hollovar.github.io/`
 - `https://hollovar.github.io/tiltflow/`
+- `https://hollovar.github.io/privacy/`
 - `https://hollovar.github.io/tiltflow/privacy/`
 - `https://hollovar.github.io/support/`
 
