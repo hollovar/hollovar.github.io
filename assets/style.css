@@ -175,6 +175,24 @@ body > * {
 	color: var(--sheet);
 }
 
+/*
+	Off-screen for the eye, present for a screen reader. The tilt drawing's readout is
+	an SVG <text>, which assistive technology never sees change; a .vh live region beside
+	it carries the same measurement in words.
+*/
+.vh {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
 .skip {
 	position: absolute;
 	left: -9999px;
@@ -483,8 +501,9 @@ h1 {
 }
 
 /*
-	Not a button: TiltFlow is in review and has no reachable listing. A disabled control
-	that looks pressable is a lie, so the pending state is drawn as a stamp instead.
+	Pending state, currently unused: TiltFlow is live and carries a real link button.
+	Kept for the next application while it is in review — a disabled control that looks
+	pressable is a lie, so a pending state is drawn as a stamp instead of a dead button.
 */
 .stamp {
 	display: inline-flex;
@@ -618,6 +637,39 @@ p {
 	background: var(--oxide);
 	color: #fff;
 	border-bottom-color: var(--oxide);
+}
+
+/*
+	A button stays a button inside prose. `.prose a` is the more specific selector, so
+	without this it repaints the label in ink on an ink fill and hangs an oxide underline
+	off the bottom edge.
+*/
+.prose .actions {
+	margin: var(--sp-6) 0;
+}
+
+.prose a.btn {
+	color: var(--sheet);
+	border: 1px solid var(--ink);
+	padding: 13px var(--sp-5);
+}
+
+.prose a.btn:hover {
+	background: var(--oxide);
+	border-color: var(--oxide);
+	color: #fff;
+}
+
+.prose a.btn--ghost {
+	background: transparent;
+	color: var(--ink);
+	border-color: var(--rule-strong);
+}
+
+.prose a.btn--ghost:hover {
+	background: transparent;
+	color: var(--oxide);
+	border-color: var(--oxide);
 }
 
 strong,
@@ -1235,14 +1287,10 @@ em {
 	}
 
 	/*
-		On a phone the name comes first: a visitor needs to know what this is before the
-		drawing earns their attention. On desktop they sit side by side and both are read.
+		The name comes first in the DOM everywhere, so reading and focus order both reach it
+		before the drawing. On desktop the grid sets them side by side; here the drawing
+		simply falls beneath the block that names it.
 	*/
-	.titleblock {
-		grid-column: 1;
-		grid-row: 1;
-	}
-
 	.plate__figure {
 		grid-column: 1;
 		grid-row: 2;

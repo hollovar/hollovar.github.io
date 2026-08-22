@@ -46,6 +46,19 @@
 <div class="sheet__frame">
 
 	<section class="plate">
+		<div class="titleblock">
+			<div class="titleblock__rule"></div>
+			<p class="note">Plate 01 · Android utility</p>
+			<h1>TiltFlow</h1>
+			<p class="lead">Tilt your phone. The page scrolls itself, only in the applications
+			you choose. It asks you for one thing: permission to swipe on your behalf.</p>
+			<div class="actions">
+				<a class="btn" href="https://play.google.com/store/apps/details?id=com.hollovar.tiltflow"
+					rel="noopener">Get it on Google Play</a>
+				<a class="btn btn--ghost" href="/tiltflow/privacy/">Privacy policy</a>
+			</div>
+		</div>
+
 		<div class="plate__figure">
 			<div class="tiltfig" id="tiltfig">
 				<svg viewBox="0 0 420 410" role="img" aria-labelledby="tilt-title tilt-desc">
@@ -112,22 +125,11 @@
 				<label class="tiltctl">
 					<span class="small">Tilt the drawing — drag it, or use the arrow keys.</span>
 					<input type="range" id="tiltrange" min="-28" max="28" step="0.5" value="0"
-						aria-label="Tilt angle in degrees">
+						aria-label="Tilt angle in degrees" aria-valuetext="0 degrees, idle">
 				</label>
 				<p class="small tiltctl__live" id="tilthint">On an Android phone, this drawing follows the
 				phone itself.</p>
-			</div>
-		</div>
-
-		<div class="titleblock">
-			<div class="titleblock__rule"></div>
-			<p class="note">Plate 01 · Android utility</p>
-			<h1>TiltFlow</h1>
-			<p class="lead">Tilt your phone. The page scrolls itself, only in the applications
-			you choose. It asks you for one thing: permission to swipe on your behalf.</p>
-			<div class="actions">
-				<span class="stamp"><span class="stamp__dot"></span>In review at Google Play</span>
-				<a class="btn btn--ghost" href="/tiltflow/privacy/">Privacy policy</a>
+				<p class="vh" id="tiltspoken" aria-live="polite" aria-atomic="true"></p>
 			</div>
 		</div>
 	</section>
@@ -308,9 +310,16 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
 	<section class="prose">
 		<h2>Availability</h2>
 
-		<p>TiltFlow has been submitted to Google Play and is waiting on review. There is no
-		public listing to link to yet — when the review completes, the download link will
-		appear here and on the studio page.</p>
+		<p>TiltFlow is published on
+		<a href="https://play.google.com/store/apps/details?id=com.hollovar.tiltflow"
+		rel="noopener">Google Play</a>, as <code>com.hollovar.tiltflow</code>. That listing is
+		the only place the application is distributed from; anything offering it elsewhere did
+		not come from this studio.</p>
+
+		<div class="actions">
+			<a class="btn" href="https://play.google.com/store/apps/details?id=com.hollovar.tiltflow"
+				rel="noopener">Get it on Google Play</a>
+		</div>
 
 		<p>The first release is free, complete and ad-free. If a paid supporter option is added
 		later it will live inside the same application, not in a separate paid one.</p>
@@ -327,6 +336,12 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
 		<div class="colophon__cell">
 			<p class="note">Requires</p>
 			<p class="colophon__value">Android 7.0 or later</p>
+		</div>
+		<div class="colophon__cell">
+			<p class="note">Available from</p>
+			<p class="colophon__value"><a
+				href="https://play.google.com/store/apps/details?id=com.hollovar.tiltflow"
+				rel="noopener">Google Play</a><br>Free · no ads</p>
 		</div>
 		<div class="colophon__cell">
 			<p class="note">Documents</p>
@@ -363,6 +378,7 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
 	var screenText = document.getElementById("screenText");
 	var range = document.getElementById("tiltrange");
 	var hint = document.getElementById("tilthint");
+	var spoken = document.getElementById("tiltspoken");
 	var fig = document.getElementById("tiltfig");
 	if (!phone || !range) return;
 
@@ -372,6 +388,8 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
 	var scrolling = false;
 	var offset = 0;
 	var userTookOver = false;
+	var announce = false;      // only once the visitor drives it — never for the demo
+	var saidDeg = null, saidScrolling = null;
 
 	function rad(d) { return (d - 90) * Math.PI / 180; }
 	function px(d, r) { return [PIVOT_X + r * Math.cos(rad(d)), PIVOT_Y + r * Math.sin(rad(d))]; }
@@ -419,6 +437,21 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
 
 		tiltValue.textContent = mag.toFixed(1) + "°";
 		stateValue.textContent = scrolling ? "SCROLLING" : "IDLE";
+
+		/*
+			The readout above is SVG <text> inside role="img": a screen reader never hears it
+			change. Say the same measurement in words, rounded to whole degrees so the live
+			region is not flooded, and only once the visitor is actually driving the drawing.
+		*/
+		var deg = Math.round(mag);
+		if (deg !== saidDeg || scrolling !== saidScrolling) {
+			saidDeg = deg;
+			saidScrolling = scrolling;
+			var said = deg + (deg === 1 ? " degree, " : " degrees, ") + (scrolling ? "scrolling" : "idle");
+			range.setAttribute("aria-valuetext", said);
+			if (announce) spoken.textContent = "Tilt " + said;
+		}
+
 		stateValue.style.fill = scrolling ? "var(--measure)" : "var(--ink-3)";
 		arc.setAttribute("stroke", scrolling ? "var(--measure)" : "var(--oxide)");
 		arcLabel.style.fill = scrolling ? "var(--measure)" : "var(--oxide)";
@@ -453,7 +486,7 @@ swipes and cannot be scrolled this way. No setting changes that, and it is worth
 	requestAnimationFrame(frame);
 
 	function setAngle(deg, fromUser) {
-		if (fromUser) userTookOver = true;
+		if (fromUser) { userTookOver = true; announce = true; }
 		angle = Math.max(-28, Math.min(28, deg));
 		if (range.value !== String(angle)) range.value = String(angle);
 		render();
